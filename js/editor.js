@@ -37,7 +37,7 @@ var DCSSEditor = function(){
 		var tmpLnks = [];
 		var stls = document.querySelectorAll('link:not([id="dyEditor-css"])[rel="stylesheet"], style:not([id="dyEditor-style"])');
 		
-		//Create comment copies of page stylesheets & inline css
+		// Create comment copies of page stylesheets & inline css
 		for(var i=0; i < stls.length; i++){
 			stls[i].setAttribute('id', 'dyEditor-supCss');
 			tmpLnks.push(stls[i]);
@@ -45,10 +45,15 @@ var DCSSEditor = function(){
 			stls[i].parentNode.insertBefore(cmt, stls[i]);
 		}
 		
-		//Remove page stylesheets
+		// Remove page stylesheets
 		for(var i=0; i < tmpLnks.length; i++){
 				tmpLnks[i].parentNode.removeChild(tmpLnks[i]);
 		}
+		
+		// Track CSS suppressing in meta data
+		var meta = document.createElement('meta');
+		meta.setAttribute('name','dyEditor-supCss');
+		document.getElementsByTagName('head')[0].appendChild(meta);
 	}
 	
 	function UnSuppressCSS(){
@@ -67,7 +72,7 @@ var DCSSEditor = function(){
 			//link elements
 				
 			if(tmpNodes[i].nodeValue.match(/<link/i)){
-				var re = /href="((https?|ftp|file)?:?\.*\/*[a-z0-9\-_./\?,@\^=%;:~+#\\]+)"/i;			
+				var re = /href="((https?|ftp|file)?[\\a-z0-9\/\-_.#:|+&?~%@,;=^]*)"/i;			
 				var elm = document.createElement('link');
 				var href = tmpNodes[i].nodeValue.match(re)[1];
 				elm.setAttribute('href', href);
@@ -176,6 +181,17 @@ var DCSSEditor = function(){
 		edt.setAttribute('id', 'dyEditor');
 		edt.innerHTML += EditorBody();
 		document.body.appendChild(edt);
+		
+		//Check Meta for suppress data
+		var metas = document.getElementsByTagName('meta');
+		for(var i=0; i<metas.length; i++){
+			if(metas[i].getAttribute('name') && metas[i].getAttribute('name') == 'dyEditor-supCss'){
+				metas[i].parentNode.removeChild(metas[i]);
+				document.getElementById('dyEditor-supChk').checked = true;
+				break;
+			}
+		}
+		
 		var edtFm = document.getElementById('dyEditor-frame');
 		edtFm.addEventListener('mousedown', Draggable, false);
 		var edtClose = document.getElementById('dyEditor-close');
