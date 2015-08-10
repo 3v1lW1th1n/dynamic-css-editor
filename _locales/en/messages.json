@@ -1,0 +1,11 @@
+{
+	"extName": {"message":"DynamicCSSEditor", "description":"Name of extension"},
+	"extDescription": {"message":"Write CSS to any web page dynamically", "description":"Description of extension"},
+	"extTitle": {"message":"Open DynamicCSSEditor", "description":"Tooltip text for extension"},
+	"extChromeURLError":	{"message":"DynamicCSSEditor does not run on chrome pages.", "description": "Chrome pages error message"},
+	"extSupLbl": {"message":"suppress page CSS?", "description":"Label for stripping off page css"},
+	"extPlaceholderTxt":	{"message":"Edit CSS for", "description": "Placeholder text for DynamicCssEditor textarea"},
+	"extOptTitle": {"message":"DynamicCSSEditor Options", "description": "DynamicCSSEditor options title"},
+	"extTabSpaceLbl": {"message":"Tab Spacing:", "description": "Label for 'Tab Spacing'"},
+	"extOptSave":	{"message":"Save", "description": "Options Save button text"}
+}
