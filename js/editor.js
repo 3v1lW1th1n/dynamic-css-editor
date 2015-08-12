@@ -18,10 +18,13 @@ var DCSSEditor = function(){
 		}
 		
 		AppendStyleTag();
+		ApplyStyleToTag();
 		
-		var tgArea = document.getElementById('dyEditor-style');
-		tgArea.innerText = txtArea.value;
-		tgArea.innerHTML = tgArea.innerHTML.replace(/<br>/g,'\n');
+		chrome.storage.local.get('svCss', function(res){
+			if($.inArray('svCss', Object.keys(res)) > -1 && res.svCss == true){
+				SaveCSS();
+			}
+		});
 	}
 	var supChk = document.getElementById('dyEditor-supChk');
 	
@@ -81,7 +84,7 @@ var DCSSEditor = function(){
 			}
 			else //inline styles
 			{
-				var re = /<style\s*(.*)?\s+id="dyEditor-supCss">((\s*.*)*)<\/style>/i;
+				var re = /<style\s*(.*)?\s+id="dyEditor\-supCss">((\s*.*)*)<\/style>/i;
 				var elm = document.createElement('style');
 				elm.innerText = tmpNodes[i].nodeValue.match(re)[2];
 				elm.innerHTML = elm.innerHTML.replace(/<br>/g,'\n');
@@ -92,6 +95,15 @@ var DCSSEditor = function(){
 		// Remove comments
 		for(var i=0; i < tmpNodes.length; i++){
 			tmpNodes[i].parentNode.removeChild(tmpNodes[i]);
+		}
+		
+		// Remove CSS suppress meta data
+		var metas = document.getElementsByTagName('meta');
+		for(var i=0; i<metas.length; i++){
+			if(metas[i].getAttribute('name') && metas[i].getAttribute('name') == 'dyEditor-supCss'){
+				metas[i].parentNode.removeChild(metas[i]);
+				break;
+			}
 		}
 		
 	}
@@ -112,7 +124,7 @@ var DCSSEditor = function(){
 		if(ev.keyCode == 9){
 			ev.preventDefault();
 			
-			chrome.storage.local.get('tabSp', function (res) {
+			chrome.storage.local.get('tabSp', function (res){
 				
 				var tab = 2;
 				
@@ -186,7 +198,7 @@ var DCSSEditor = function(){
 		var metas = document.getElementsByTagName('meta');
 		for(var i=0; i<metas.length; i++){
 			if(metas[i].getAttribute('name') && metas[i].getAttribute('name') == 'dyEditor-supCss'){
-				metas[i].parentNode.removeChild(metas[i]);
+				//metas[i].parentNode.removeChild(metas[i]);
 				document.getElementById('dyEditor-supChk').checked = true;
 				break;
 			}
@@ -201,8 +213,16 @@ var DCSSEditor = function(){
 		window.scrollTo(x, y); //undo scroll caused by editor element
 		
 		//Retrieve css in style tag from a previous closed editor
-		if(document.getElementById('dyEditor-style')) 
+		if(document.getElementById('dyEditor-style')){ 
 			document.getElementById('dyEditor-txtarea').value = document.getElementById('dyEditor-style').innerText;
+		}
+		else{
+			chrome.storage.local.get('svCss', function(res){
+				if($.inArray('svCss', Object.keys(res)) > -1 && res.svCss == true){
+					LoadCSS();
+				}
+			});
+		}
 	}
 	
 	function Draggable(ev) {
@@ -233,6 +253,62 @@ var DCSSEditor = function(){
 	function CloseEditor(){
 		var edt = document.getElementById('dyEditor');
 		edt.parentNode.removeChild(edt);
+	}
+	
+	function SaveCSS(){
+    chrome.storage.local.get('css', function (res) {
+			if($.inArray('css', Object.keys(res)) < 0){
+				var css = [];
+				var site = {
+					'origin': document.location.origin,
+					'data': txtArea.value
+				};
+				css.push(site);
+				chrome.storage.local.set({'css': css});
+
+			}else{
+			
+				var css = res.css;
+				var site = res.css.filter(function(obj) {
+					return obj.origin == document.location.origin;
+				});
+				if(site.length > 0){ // Remove from storage if no data is written in editor
+					site[0].data = txtArea.value;
+					if(site[0].data.length < 1){
+						var idx = css.indexOf(site[0]);
+						css.splice(idx, 1);
+					}
+				}else{
+					css.push({'origin': document.location.origin, 'data': txtArea.value});
+				}
+				console.log(css);
+				chrome.storage.local.set({'css': css});
+			}
+		});
+	}
+	
+	function LoadCSS(){
+		// Load from chrome storage
+		chrome.storage.local.get('css', function(res){
+			if($.inArray('css', Object.keys(res)) > -1){
+				var site = res.css.filter(function(obj) {
+					return obj.origin == document.location.origin;
+				});
+				if(site.length > 0){
+					AppendStyleTag();
+					if(site[0].data && site[0].data.length > 0){
+						document.getElementById('dyEditor-txtarea').value = site[0].data;
+						ApplyStyleToTag();
+					}
+				}
+			}
+		});
+	}
+	
+	function ApplyStyleToTag(){
+		var tgArea = document.getElementById('dyEditor-style');
+		tgArea.innerText = txtArea.value;
+		tgArea.innerHTML = tgArea.innerHTML.replace(/<br>/g,'\n');
 	}
 	
 };

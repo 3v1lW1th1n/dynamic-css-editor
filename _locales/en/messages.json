@@ -7,5 +7,6 @@
 	"extPlaceholderTxt":	{"message":"Edit CSS for", "description": "Placeholder text for DynamicCssEditor textarea"},
 	"extOptTitle": {"message":"DynamicCSSEditor Options", "description": "DynamicCSSEditor options title"},
 	"extTabSpaceLbl": {"message":"Tab Spacing:", "description": "Label for 'Tab Spacing'"},
-	"extOptSave":	{"message":"Save", "description": "Options Save button text"}
+	"extOptSave":	{"message":"Save", "description": "Options Save button text"},
+	"extChkSvCssLbl":{"message":"Have editor remember your CSS after closing page?", "description": "Label for persisting css checkbox"}
 }
