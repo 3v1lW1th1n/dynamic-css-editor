@@ -122,3 +122,5 @@ html,body { display: block !important; }
 .dyEditor-draggable {
 	opacity: 0.4 !important;
 }
+
+@media print {#dyEditor {display: none !important;}}
