@@ -245,7 +245,7 @@ var DCSSEditor = function(){
 							'</div>'+
 						'<div>'+
 						'<textarea id="dyEditor-txtarea" spellcheck="false" '+
-						'placeholder="'+chrome.i18n.getMessage("extPlaceholderTxt")+" "+document.URL+'">'+
+						'placeholder="'+chrome.i18n.getMessage("extPlaceholderTxt")+" "+document.location.origin+'">'+
 						'</textarea><div id="dyEditor-chkOpts"><label>'+chrome.i18n.getMessage("extSupLbl")+
 						'</label><input id="dyEditor-supChk" type="checkbox"></div></div>';
 	}
