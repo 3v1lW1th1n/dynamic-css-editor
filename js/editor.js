@@ -38,7 +38,7 @@ var DCSSEditor = function(){
 	
 	function SuppressCSS(){
 		var tmpLnks = [];
-		var stls = document.querySelectorAll('link:not([id="dyEditor-css"])[rel="stylesheet"], style:not([id="dyEditor-style"])');
+		var stls = document.querySelectorAll('link:not([id="dyEditor-css"])[href][rel="stylesheet"], style:not([id="dyEditor-style"])');
 		
 		// Create comment copies of page stylesheets & inline css
 		for(var i=0; i < stls.length; i++){
