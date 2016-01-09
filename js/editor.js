@@ -9,6 +9,11 @@ var DCSSEditor = function(){
 	}
 		
 	var txtArea = document.getElementById('dyEditor-txtarea');
+	var ln = document.getElementById("dyEditor-lineNum");
+	
+	RefreshLn();
+	
+	txtArea.onscroll = function () { ln.style.top = -(txtArea.scrollTop) + "px";}
 	txtArea.onkeydown = function(ev){ HandleTabKey(ev);}
 	txtArea.onkeyup = function(ev){
 		
@@ -17,6 +22,7 @@ var DCSSEditor = function(){
 			return;
 		}
 		
+		RefreshLn();
 		AppendStyleTag();
 		ApplyStyleToTag();
 		
@@ -34,6 +40,16 @@ var DCSSEditor = function(){
 		}else{
 			UnSuppressCSS();
 		}
+	}
+	
+	function RefreshLn(){
+		var count = txtArea.value.split("\n").length;
+
+		ln.innerHTML = "";
+		for (var i=1; i<=count; i++) {
+			ln.innerHTML = ln.innerHTML + i + "." + "<br />"; //Append line numbers
+		}
+		ln.style.top = -(txtArea.scrollTop) + "px";
 	}
 	
 	function SuppressCSS(){
@@ -244,6 +260,7 @@ var DCSSEditor = function(){
 								'<span id="dyEditor-close"><i class="fa fa-close"></i></span>'+
 							'</div>'+
 						'<div>'+
+						'<div id="dyEditor-lnContainer"><div id="dyEditor-lineNum"></div></div>'+
 						'<textarea id="dyEditor-txtarea" spellcheck="false" '+
 						'placeholder="'+chrome.i18n.getMessage("extPlaceholderTxt")+" "+document.location.origin+'">'+
 						'</textarea><div id="dyEditor-chkOpts"><label>'+chrome.i18n.getMessage("extSupLbl")+
@@ -298,6 +315,13 @@ var DCSSEditor = function(){
 					AppendStyleTag();
 					if(site[0].data && site[0].data.length > 0){
 						document.getElementById('dyEditor-txtarea').value = site[0].data;
+						
+						// get line count from new lines char
+						var count = (site[0].data).split('\n').length;
+						ln.innerHTML = "";
+						for (var i=1; i<=count; i++) {
+							ln.innerHTML = ln.innerHTML + i + "." + "<br />";
+						}
 						ApplyStyleToTag();
 					}
 				}

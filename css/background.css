@@ -2,17 +2,17 @@ html,body { display: block !important; }
 
 #dyEditor{ 
 	font-size:15px !important;
-  color:#000 !important;
-  width:300px !important;
-  height:250px !important;
+	color:#000 !important;
+	width:300px !important;
+	height:250px !important;
 	background: #CCC url('../bg.png')left top !important;
-  padding: 5px !important;
-  margin:0px !important;
-  display:block !important;
-  position:fixed !important;
-  top: 0px;
+	padding: 5px !important;
+	margin:0px !important;
+	display:block !important;
+	position:fixed !important;
+	top: 0px;
 	right:0px;
-  z-index: 9999999999!important;
+	z-index: 9999999999!important;
 	border-radius: 0px 0px 5px 5px !important;
 	border-top: 2px solid #BBB !important;
 	border-left: 2px solid #BBB !important;
@@ -22,7 +22,7 @@ html,body { display: block !important; }
 	line-height:0px !important;
 }
 
-#dyEditor div{
+#dyEditor div:not(#dyEditor-lnContainer){
 	background-color:transparent !important;
 	display: block !important;
 }
@@ -77,7 +77,7 @@ html,body { display: block !important; }
 	font-family: Consolas, monaco, monospace !important;
 	color:#000 !important;
 	margin:5px !important;
-	width:95% !important;
+	width:88% !important;
 	height:190px !important;
 	background:#FFF !important;
 	border: 1px solid #BBB !important;
@@ -120,9 +120,31 @@ html,body { display: block !important; }
 	cursor:context-menu !important;
 	display:inline !important;
 }
-  
+
+#dyEditor-lnContainer
+{
+	width: 25px;
+	float: left;
+	color: #444;
+	font-family: Courier New;
+	font-size: 14px;
+	overflow: hidden;
+	height: 176px;
+    position: relative;
+    top: 0px;
+	line-height: 13px !important;
+	background-color:#ccc !important;
+}
+#dyEditor-lineNum 
+{
+	width: 25px;
+	text-align:right;
+	position: absolute;
+}
+ 
 .dyEditor-draggable {
 	opacity: 0.4 !important;
 }
+
 
 @media print {#dyEditor {display: none !important;}}
